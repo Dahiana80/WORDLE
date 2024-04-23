@@ -1,53 +1,71 @@
-console.log("hola mundo"); 
+let palabra = "APPLE";
+let tieneVidas = 6;
+let verde = "#79b851";
+let amarillo = "#f3c237";
+let gris= "#a4aec4";
 
-let intentos =6; 
-let palabra = "RATON"; // palabra = ["R","A","T","O","N"]
 
-console.log(palabra); 
+let diccionario = ["HOUSE", "PASTA", "ANGEL", "NEVER", "AFTER"];
+let max = diccionario.length - 1;
+let indice = Math.floor(Math.random() * max + 1);
+palabra = diccionario[indice];
 
-let intento = "TAJON";//intento del usuario 
+let input= document.getElementById("guess-input");
+input.addEventListener("keypress",(event)=>{
+    if (event.key === "Enter"){
+        event.preventDefault();
+        document.getElementById("guess-button").click();
+    }
+});
+document.getElementById("guess-button").addEventListener("click",()=>{
+    const intento = leerIntento ();
 
-//algoritmo 
-/* 
-si palabra es igual a intento entonces imprimir ganaste 
-sino 
-    restar cantidad intentos en 1 
-    sino si primer_intento es igual a primer_palabra entonces  
-    imprimir primer_intento en verde   
-    sino si primer_intento existe palabra entonces imprimir 
-    primer_intento amarillo 
-    sino entonces imprima primer_intento gris 
+    if (palabra === intento){
+        terminar("GANASTE😀!");
+        return;
+    }
+    const row = document.createElement("div");
+    row.className = "row";
 
-si intentos es igual a cero entonce imprimo perdiste 
-    */ 
- function intentar(){
-    if (palabra===intento){
+    for (const i in intento){
+        const span = document.createElement("span");
+        span.className = "letter";
+        span.innerText = intento[i];
 
-        console.log("GANASTE");
-    }else{
-        intentos = intentos -1; //intentos --1
-        console.log("te queda",intentos,"intentos");
-        for(pos in palabra){
-            //console.log("mensaje",pos);
-            if(intento[pos]===palabra[pos]){
-                console.log(intento[pos],"verde");
-            }else if (palabra.includes(intento[pos])) {
-                console.log(intento[pos],"amarrillo");
-            }else{
-                console.log(intento[pos],"gris");
-            }
+        if (intento[i] === palabra[i]){
+            span.style.background = verde;
+        }else if (palabra.includes(intento[i])){
+            span.style.background = amarillo;
+        }else {
+            span.style.background = gris;
         }
-    }
-    
-    if(intento===0){
-        console.log("PERDISTE");
-    }
- }
+        row.appendChild(span)
 
- intentar ("CAJON")
- intentar ("RAJON")
- intentar ("MAJON")
-   //let vector = [1,"hola",true,34];
-   //console.log(palabra[3]);
+    }
+    grid.appendChild(row);
+    tieneVidas--;
+    if (!tieneVidas){ 
+        terminar("PERDISTE!😖");
+        return;
+    }
+
+    
+});
+
+function leerIntento(){
+    const input = document.getElementById("guess-input");
+    const valor = input.value.toUpperCase();
+    return valor;
+}
+
+function terminar(mensaje){
+    let p = document.getElementById("guesses");
+    p.innerHTML = "<h1>" + mensaje + "</h1>";
+    if (mensaje === "PERDISTE!😖"){
+        p.innerHTML += "<br>La palabra correcta era: " + palabra;
+        
+    }
+}
+
 
 
